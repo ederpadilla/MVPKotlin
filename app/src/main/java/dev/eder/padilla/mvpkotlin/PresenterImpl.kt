@@ -3,8 +3,8 @@ package dev.eder.padilla.mvpkotlin
 import android.text.TextUtils
 import dev.eder.padilla.mvpkotlin.api.ServiceGenerator
 import dev.eder.padilla.mvpkotlin.api.response.LogInResponse
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 
 class PresenterImpl(internal var mLogInView: LogInView) : LoginPresenter {
@@ -14,16 +14,10 @@ class PresenterImpl(internal var mLogInView: LogInView) : LoginPresenter {
             mLogInView.logInValidation()
         } else {
             val client = ServiceGenerator.getService()
-            val scheduler = Schedulers.newThread()
             client.login(mail,pass)
-                    .subscribeOn(scheduler)
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe ({ loginResponse -> sucessLogin(loginResponse)},{error -> errorLogin(error)})
-            //if (mail == "eder@uble.mx" && pass == "12345678") {
-            //    mLogInView.loginSuccesss()
-            //} else {
-            //    mLogInView.loginError()
-            //}
+                    .subscribe (this::sucessLogin,this::errorLogin)
         }
     }
 

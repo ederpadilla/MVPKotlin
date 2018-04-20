@@ -1,10 +1,10 @@
 package dev.eder.padilla.mvpkotlin.api
 
 import dev.eder.padilla.mvpkotlin.api.response.LogInResponse
+import io.reactivex.Observable
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
-import rx.Observable
 
 interface LogInClient {
     @FormUrlEncoded
